@@ -7,7 +7,7 @@ COPY package*.json ./
 # install dependencies, for production use RUN npm install --only=production
 RUN npm install
 # copy app source to container work directory
-# COPY . .
+COPY . .
 # expose port Webpack dev server is listening on
 EXPOSE 8000
 # run following command after container provisioned
