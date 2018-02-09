@@ -2,6 +2,14 @@
 
 ![Alt Text](https://raw.githubusercontent.com/sarmadsaleem/weatherapp/master/frontend/src/public/img/app.gif)
 
+## Getting started
+Make sure you have git, docker and docker-compose installed on your local machine.
+```
+git clone https://github.com/sarmadsaleem/weatherapp.git
+cd weatherapp
+docker-compose up
+```
+
 ## Exercises
 
 There are a few things you must do to get the app up and running. After that there are a few things you can do to make it better.
