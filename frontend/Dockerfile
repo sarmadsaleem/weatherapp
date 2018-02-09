@@ -1,19 +1,14 @@
+# use base image of node:9-slim
 FROM node:9-slim
-
-# Create app directory
+# create app directory on container
 WORKDIR /usr/src/app
-
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
+# copy package.json & package-lock.json for app dependencies
 COPY package*.json ./
-
+# install dependencies, for production use RUN npm install --only=production
 RUN npm install
-# If you are building your code for production
-# RUN npm install --only=production
-
-# Bundle app source
-COPY . .
-
+# copy app source to container work directory
+# COPY . .
+# expose port Webpack dev server is listening on
 EXPOSE 8000
+# run following command after container provisioned
 CMD [ "npm", "start" ]

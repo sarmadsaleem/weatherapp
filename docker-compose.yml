@@ -3,10 +3,25 @@ services:
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
-     - "9000:9000"
+      - "9000:9000"
+    environment:
+      - APPID=1f3f7ce5d4c4a18ee18e61ad51752fd6
+
   frontend:
     build:
       context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend/:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
      - "8000:8000"
+    links:
+      - backend
+    depends_on:
+      - backend
