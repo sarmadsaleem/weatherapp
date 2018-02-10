@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const baseURL = process.env.ENDPOINT;
+const baseURL = process.env.ENDPOINT || 'http://35.202.173.81:9000/api';
 
 const getWeatherFromApi = async (lat, lon) => {
   try {
@@ -29,6 +29,32 @@ const getForecastFromApi = async (lat, lon) => {
   return {};
 };
 
+const getLocationOnInsecure = async () => {
+
+  let position = {
+    coords: {
+      latitude: '',
+      longitude: ''
+    }
+  };
+
+  const response = await fetch('http://ip-api.com/json');
+
+  //return response.json();
+  if(response.ok){
+
+    return response.json();
+    //return payload;
+    //const response2 = await fetch('http://maps.googleapis.com/maps/api/geocode/json?address=' + response.json().zip)
+
+  }
+  else
+  {
+    alert('Error locating on insecure connection');
+  }
+
+}
+
 class Weather extends React.Component {
   constructor(props) {
     super(props);
@@ -49,25 +75,53 @@ class Weather extends React.Component {
     this.getLocation = this.getLocation.bind(this)
   }
 
-  getLocation() {
+  async getLocation() {
     const location = window.navigator && window.navigator.geolocation
+    // HTML5 geolocation api only works on https only or localhost on chrome for dev purpose
+    //const isChrome = window.chrome;
+    //const isLocal = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+    const isSecure = (window.location.protocol === 'https')
     
     if (location) {
-      console.log('Geolocation request initiated');
-      this.setState({ loading: true });
-      location.getCurrentPosition((position) => {
-        this.setState({
-          lat: position.coords.latitude,
-          lon: position.coords.longitude,
-        })
 
+      if(!isSecure)
+      {
+        this.setState({ loading: true });
+        const data = await getLocationOnInsecure();
+        console.log('Geolocation insecure request initiated');
+        this.setState({ 
+          lat: data.lat,
+          lon: data.lon, 
+        });
         this.componentWillMount();
         this.componentDidMount();
-        console.log('Geolocation request completed');
+        console.log('Geolocation insecure request completed');
+      }
+      else
+      {
+        console.log('Geolocation request initiated');
+        this.setState({ loading: true });
+        location.getCurrentPosition((position) => {
+          this.setState({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          })
 
-      }, (error) => {
-        this.setState({ lat: undefined, lon: undefined })
-      })
+          this.componentWillMount();
+          this.componentDidMount();
+          console.log('Geolocation request completed');
+
+        }, (error) => {
+          this.setState({ lat: undefined, lon: undefined })
+          alert(message);
+        })
+
+      }
+    }
+    else
+    {
+        alert('HTML5 Geolocation API can only work on a secure connection. For testing, try on localhost.');
+      
     }
 
   }
@@ -111,7 +165,7 @@ class Weather extends React.Component {
           
             {forecasts.map(function(forecast, index){
 
-              const d = new Date(forecast.dt_txt);
+              const d = new Date(forecast.dt);
 
               return <div key={index} className="forecast">
                       <div className="hour">{ d.getHours()}:00</div>

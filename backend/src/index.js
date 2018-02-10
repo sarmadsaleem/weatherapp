@@ -31,7 +31,7 @@ const fetchWeather = async (lat, lon) => {
 const fetchWeatherForecast = async (lat, lon) => {
 
   let endpoint = '';
-  (lat === undefined && lon == undefined) ?
+  (lat === undefined && lon === undefined) ?
     endpoint = `${mapURI}/forecast?q=${targetCity}&units=${units}&appid=${appId}` :
     endpoint = `${mapURI}/forecast?lat=${lat}&lon=${lon}&units=${units}&appid=${appId}`;
 
