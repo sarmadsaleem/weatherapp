@@ -165,7 +165,7 @@ class Weather extends React.Component {
           
             {forecasts.map(function(forecast, index){
 
-              const d = new Date(forecast.dt);
+              let d = new Date(forecast.dt * 1000);
 
               return <div key={index} className="forecast">
                       <div className="hour">{ d.getHours()}:00</div>
