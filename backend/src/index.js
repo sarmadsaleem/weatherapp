@@ -19,7 +19,7 @@ app.use(cors());
 const fetchWeather = async (lat, lon) => {
 
   let endpoint = '';
-  (lat === undefined && lon == undefined) ?
+  (lat === undefined && lon === undefined) ?
     endpoint = `${mapURI}/weather?q=${targetCity}&units=${units}&appid=${appId}` :
     endpoint = `${mapURI}/weather?lat=${lat}&lon=${lon}&units=${units}&appid=${appId}`;
     
